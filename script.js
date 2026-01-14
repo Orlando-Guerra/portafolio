@@ -171,7 +171,7 @@ function inicializarProyectos() {
     
     // Ver más en GitHub
     document.getElementById('btn-ver-mas').addEventListener('click', () => {
-        window.open('https://github.com', '_blank');
+        window.open('https://github.com/Orlando-Guerra', '_blank');
     });
 }
 
@@ -243,54 +243,32 @@ function inicializarFormularioContacto() {
     const formulario = document.getElementById('form-contacto');
     
     formulario.addEventListener('submit', function(e) {
-        e.preventDefault();
-        
-        // Validar campos
+        // Validación básica antes de enviar a Formspree
         const nombre = document.getElementById('nombre').value.trim();
         const email = document.getElementById('email').value.trim();
-        const asunto = document.getElementById('asunto').value.trim();
         const mensaje = document.getElementById('mensaje').value.trim();
         
-        if (!nombre || !email || !asunto || !mensaje) {
-            mostrarAlerta('Por favor, completa todos los campos', 'error');
+        if (!nombre || !email || !mensaje) {
+            e.preventDefault();
+            mostrarAlerta('Por favor, completa todos los campos obligatorios', 'error');
             return;
         }
         
         if (!validarEmail(email)) {
+            e.preventDefault();
             mostrarAlerta('Por favor, ingresa un email válido', 'error');
             return;
         }
         
-        // Simular envío (en un caso real, aquí iría una petición AJAX)
-        mostrarAlerta('¡Mensaje enviado correctamente! Te responderé pronto.', 'exito');
-        formulario.reset();
-        
-        // Aquí puedes agregar una petición fetch para enviar el email
-        // Ejemplo con EmailJS o tu backend:
-        // enviarEmail({ nombre, email, asunto, mensaje });
-    });
-    
-    // Validación en tiempo real
-    const inputs = formulario.querySelectorAll('input, textarea');
-    inputs.forEach(input => {
-        input.addEventListener('blur', validarCampo);
+        // Si pasa la validación, Formspree se encargará del envío
+        // Podemos mostrar un mensaje de "Enviando..." opcionalmente
+        mostrarAlerta('Enviando mensaje...', 'exito');
     });
 }
 
 function validarEmail(email) {
     const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return regex.test(email);
-}
-
-function validarCampo(e) {
-    const campo = e.target;
-    const valor = campo.value.trim();
-    
-    if (!valor) {
-        campo.style.borderColor = '#ef4444';
-    } else {
-        campo.style.borderColor = '#10b981';
-    }
 }
 
 function mostrarAlerta(mensaje, tipo) {
@@ -302,10 +280,10 @@ function mostrarAlerta(mensaje, tipo) {
     
     // Crear nueva alerta
     const alerta = document.createElement('div');
-    alerta.className = `alerta alerta-${tipo}`;
+    alerta.className = `alerta alerta-${tipo === 'error' ? 'error' : ''}`;
     alerta.innerHTML = `
         <div class="alerta-contenido">
-            <i class="bi ${tipo === 'exito' ? 'bi-check-circle' : 'bi-exclamation-circle'}"></i>
+            <i class="bi ${tipo === 'error' ? 'bi-exclamation-circle' : 'bi-check-circle'}"></i>
             <span>${mensaje}</span>
         </div>
         <button class="alerta-cerrar">
@@ -313,43 +291,7 @@ function mostrarAlerta(mensaje, tipo) {
         </button>
     `;
     
-    // Estilos de alerta
-    alerta.style.cssText = `
-        position: fixed;
-        top: 20px;
-        right: 20px;
-        background: ${tipo === 'exito' ? '#10b981' : '#ef4444'};
-        color: white;
-        padding: 15px 20px;
-        border-radius: 8px;
-        display: flex;
-        align-items: center;
-        justify-content: space-between;
-        gap: 15px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-        z-index: 3000;
-        animation: slideIn 0.3s ease;
-        max-width: 400px;
-    `;
-    
-    const alertaContenido = alerta.querySelector('.alerta-contenido');
-    alertaContenido.style.cssText = `
-        display: flex;
-        align-items: center;
-        gap: 10px;
-        flex: 1;
-    `;
-    
     const botonCerrar = alerta.querySelector('.alerta-cerrar');
-    botonCerrar.style.cssText = `
-        background: transparent;
-        border: none;
-        color: white;
-        cursor: pointer;
-        font-size: 1.2rem;
-        padding: 0;
-    `;
-    
     botonCerrar.addEventListener('click', () => {
         alerta.style.animation = 'slideOut 0.3s ease';
         setTimeout(() => alerta.remove(), 300);
@@ -364,32 +306,6 @@ function mostrarAlerta(mensaje, tipo) {
     }, 5000);
     
     document.body.appendChild(alerta);
-    
-    // Animaciones CSS
-    const style = document.createElement('style');
-    style.textContent = `
-        @keyframes slideIn {
-            from {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-            to {
-                transform: translateX(0);
-                opacity: 1;
-            }
-        }
-        @keyframes slideOut {
-            from {
-                transform: translateX(0);
-                opacity: 1;
-            }
-            to {
-                transform: translateX(100%);
-                opacity: 0;
-            }
-        }
-    `;
-    document.head.appendChild(style);
 }
 
 // ===== MODAL PARA DESCARGAR CV =====
@@ -434,8 +350,9 @@ function inicializarModalCV() {
             mostrarAlerta('Descarga iniciada (simulación)', 'exito');
             cerrarModal();
             
-            // Aquí irían los enlaces reales:
-            // window.open('tu-cv.pdf', '_blank');
+            // Para una implementación real, descomenta y actualiza estos enlaces:
+            // window.open('ruta/a/tu-cv.pdf', '_blank'); // Para PDF
+            // window.open('ruta/a/tu-cv.docx', '_blank'); // Para Word
         });
     });
     

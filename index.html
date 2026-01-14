@@ -132,7 +132,6 @@
             <h2 class="titulos_secciones">Mis Habilidades</h2>
             <div class="habilidades-grid">
                 <!-- Las habilidades se llenarán con JavaScript -->
-                <!-- Pero aquí dejamos el contenedor -->
             </div>
         </div>
     </section>
@@ -149,7 +148,6 @@
             </div>
             <div class="proyectos-grid">
                 <!-- Los proyectos se llenarán con JavaScript -->
-                <!-- Aquí van 6 espacios para proyectos -->
             </div>
             <div class="proyectos-mas">
                 <button class="btn btn-primario" id="btn-ver-mas">
@@ -196,22 +194,26 @@
                         <a href="#" class="red-social"><i class="bi bi-linkedin"></i></a>
                         <a href="#" class="red-social"><i class="bi bi-github"></i></a>
                         <a href="#" class="red-social"><i class="bi bi-twitter"></i></a>
-                        <a href="#" class="red-social"><i class="bi bi-whatsapp"></i></a>
+                        <a href="https://wa.me/584121156605" class="red-social" target="_blank"><i class="bi bi-whatsapp"></i></a>
                     </div>
                 </div>
                 <div class="contacto-formulario">
-                    <form id="form-contacto">
+                    <!-- IMPORTANTE: Reemplaza el action con tu endpoint de Formspree -->
+                    <form id="form-contacto" action="https://formspree.io/f/mvzzojln" method="POST">
+                        <input type="hidden" name="_subject" value="Nuevo mensaje del portafolio de Orlando">
+                        <input type="text" name="_gotcha" style="display:none">
+                        
                         <div class="form-grupo">
-                            <input type="text" id="nombre" placeholder="Tu nombre" required>
+                            <input type="text" id="nombre" name="nombre" placeholder="Tu nombre" required>
                         </div>
                         <div class="form-grupo">
-                            <input type="email" id="email" placeholder="Tu email" required>
+                            <input type="email" id="email" name="email" placeholder="Tu email" required>
                         </div>
                         <div class="form-grupo">
-                            <input type="text" id="asunto" placeholder="Asunto" required>
+                            <input type="text" id="asunto" name="asunto" placeholder="Asunto" required>
                         </div>
                         <div class="form-grupo">
-                            <textarea id="mensaje" rows="5" placeholder="Tu mensaje..." required></textarea>
+                            <textarea id="mensaje" name="mensaje" rows="5" placeholder="Tu mensaje..." required></textarea>
                         </div>
                         <button type="submit" class="btn btn-primario btn-block">
                             <i class="bi bi-send"></i> Enviar Mensaje
@@ -278,4 +280,3 @@
     <script src="script.js"></script>
 </body>
 </html>
-    
