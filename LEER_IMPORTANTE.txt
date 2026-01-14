@@ -1,5 +1,0 @@
-Por una distracción durante el vídeo me olvidé de colocar en los enlaces de la barra de navegación la referencía por id para que cada enlace de la barra de navegación nos lleve a su respectiva seccion lo que debes hacer es lo siguiente:
-
-1. Ponerle un id a cada section que representa cada una de las secciones que fuimos creando
-2. En el href de cada etiqueta 'a' de la barra de navegación colocarle en su href="#idDeLaSeccion" con el simbolo # antes del nombre del id. De esa manera cada sección de la página quedará referenciada con su respectivo link
-3. Ponerle a la etiqueta html la propiedad scroll-behavior: smooth; esto le dará un efecto mas suave al movimiento de moverse a las distintas secciones de la página web.
