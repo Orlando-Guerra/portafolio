@@ -97,7 +97,6 @@ function inicializarMenuHamburguesa() {
     const menuCheckbox = document.getElementById('menu-hamburguesa');
     const enlacesMenu = document.querySelectorAll('.menu a');
     
-    // Cerrar menú al hacer clic en un enlace (mobile)
     enlacesMenu.forEach(enlace => {
         enlace.addEventListener('click', () => {
             if (window.innerWidth <= 768) {
@@ -106,7 +105,6 @@ function inicializarMenuHamburguesa() {
         });
     });
     
-    // Cerrar menú al hacer clic fuera (mobile)
     document.addEventListener('click', (e) => {
         const menu = document.querySelector('.navegacion');
         const hamburger = document.querySelector('.menu-hamburguesa');
@@ -123,13 +121,13 @@ function inicializarMenuHamburguesa() {
 // ===== HABILIDADES =====
 function inicializarHabilidades() {
     const contenedor = document.querySelector('.habilidades-grid');
+    contenedor.innerHTML = '';
     
     datosPortafolio.habilidades.forEach(habilidad => {
         const card = crearCardHabilidad(habilidad);
         contenedor.appendChild(card);
     });
     
-    // Animar barras de progreso
     setTimeout(() => {
         animarBarrasHabilidad();
     }, 500);
@@ -169,7 +167,6 @@ function inicializarProyectos() {
         contenedor.appendChild(card);
     });
     
-    // Ver más en GitHub
     document.getElementById('btn-ver-mas').addEventListener('click', () => {
         window.open('https://github.com/Orlando-Guerra', '_blank');
     });
@@ -182,7 +179,7 @@ function crearCardProyecto(proyecto) {
     
     card.innerHTML = `
         <div class="proyecto-imagen">
-            <i class="bi bi-laptop"></i>
+            <img src="img/${proyecto.imagen}.jpg" alt="${proyecto.titulo}" onerror="this.innerHTML='<i class=bi-laptop></i>'">
         </div>
         <div class="proyecto-contenido">
             <span class="proyecto-categoria">${proyecto.categoria.toUpperCase()}</span>
@@ -203,7 +200,6 @@ function crearCardProyecto(proyecto) {
             </div>
         </div>
     `;
-    
     return card;
 }
 
@@ -213,13 +209,8 @@ function inicializarFiltros() {
     
     botonesFiltro.forEach(boton => {
         boton.addEventListener('click', () => {
-            // Quitar clase activa de todos los botones
             botonesFiltro.forEach(btn => btn.classList.remove('activo'));
-            
-            // Agregar clase activa al botón clickeado
             boton.classList.add('activo');
-            
-            // Filtrar proyectos
             const filtro = boton.getAttribute('data-filtro');
             filtrarProyectos(filtro);
         });
@@ -234,23 +225,22 @@ function filtrarProyectos(categoria) {
             proyecto => proyecto.categoria === categoria
         );
     }
-    
     inicializarProyectos();
 }
 
 // ===== FORMULARIO DE CONTACTO =====
 function inicializarFormularioContacto() {
     const formulario = document.getElementById('form-contacto');
-    
+    if(!formulario) return;
+
     formulario.addEventListener('submit', function(e) {
-        // Validación básica antes de enviar a Formspree
         const nombre = document.getElementById('nombre').value.trim();
         const email = document.getElementById('email').value.trim();
         const mensaje = document.getElementById('mensaje').value.trim();
         
         if (!nombre || !email || !mensaje) {
             e.preventDefault();
-            mostrarAlerta('Por favor, completa todos los campos obligatorios', 'error');
+            mostrarAlerta('Por favor, completa todos los campos', 'error');
             return;
         }
         
@@ -260,25 +250,18 @@ function inicializarFormularioContacto() {
             return;
         }
         
-        // Si pasa la validación, Formspree se encargará del envío
-        // Podemos mostrar un mensaje de "Enviando..." opcionalmente
         mostrarAlerta('Enviando mensaje...', 'exito');
     });
 }
 
 function validarEmail(email) {
-    const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-    return regex.test(email);
+    return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
 }
 
 function mostrarAlerta(mensaje, tipo) {
-    // Remover alerta anterior si existe
     const alertaAnterior = document.querySelector('.alerta');
-    if (alertaAnterior) {
-        alertaAnterior.remove();
-    }
+    if (alertaAnterior) alertaAnterior.remove();
     
-    // Crear nueva alerta
     const alerta = document.createElement('div');
     alerta.className = `alerta alerta-${tipo === 'error' ? 'error' : ''}`;
     alerta.innerHTML = `
@@ -286,132 +269,64 @@ function mostrarAlerta(mensaje, tipo) {
             <i class="bi ${tipo === 'error' ? 'bi-exclamation-circle' : 'bi-check-circle'}"></i>
             <span>${mensaje}</span>
         </div>
-        <button class="alerta-cerrar">
-            <i class="bi bi-x"></i>
-        </button>
+        <button class="alerta-cerrar"><i class="bi bi-x"></i></button>
     `;
     
-    const botonCerrar = alerta.querySelector('.alerta-cerrar');
-    botonCerrar.addEventListener('click', () => {
-        alerta.style.animation = 'slideOut 0.3s ease';
-        setTimeout(() => alerta.remove(), 300);
+    alerta.querySelector('.alerta-cerrar').addEventListener('click', () => {
+        alerta.remove();
     });
     
-    // Auto-eliminar después de 5 segundos
-    setTimeout(() => {
-        if (alerta.parentNode) {
-            alerta.style.animation = 'slideOut 0.3s ease';
-            setTimeout(() => alerta.remove(), 300);
-        }
-    }, 5000);
-    
+    setTimeout(() => { if (alerta.parentNode) alerta.remove(); }, 5000);
     document.body.appendChild(alerta);
 }
 
-// ===== MODAL PARA DESCARGAR CV =====
+// ===== MODAL PARA DESCARGAR CV (ACTUALIZADO) =====
 function inicializarModalCV() {
     const botonDescargar = document.getElementById('btn-descargar-cv');
     const modal = document.getElementById('modal-cv');
+    if(!modal || !botonDescargar) return;
+
     const botonCerrar = modal.querySelector('.modal-cerrar');
     
-    // Abrir modal
     botonDescargar.addEventListener('click', (e) => {
         e.preventDefault();
         modal.style.display = 'flex';
-        setTimeout(() => {
-            modal.classList.add('mostrar');
-        }, 10);
+        setTimeout(() => modal.classList.add('mostrar'), 10);
     });
     
-    // Cerrar modal con el botón X
-    botonCerrar.addEventListener('click', () => {
-        cerrarModal();
-    });
-    
-    // Cerrar modal al hacer clic fuera
-    modal.addEventListener('click', (e) => {
-        if (e.target === modal) {
-            cerrarModal();
-        }
-    });
-    
-    // Cerrar modal con Escape
-    document.addEventListener('keydown', (e) => {
-        if (e.key === 'Escape' && modal.classList.contains('mostrar')) {
-            cerrarModal();
-        }
-    });
-    
-    // Enlaces de descarga (simulados)
+    botonCerrar.addEventListener('click', cerrarModal);
+    modal.addEventListener('click', (e) => { if (e.target === modal) cerrarModal(); });
+
+    // ENLACES REALES AL CV
     const enlacesDescarga = modal.querySelectorAll('.btn');
     enlacesDescarga.forEach(enlace => {
-        enlace.addEventListener('click', (e) => {
-            e.preventDefault();
-            mostrarAlerta('Descarga iniciada (simulación)', 'exito');
+        enlace.addEventListener('click', () => {
+            window.open('img/cv_orlando.pdf', '_blank'); 
+            mostrarAlerta('Abriendo currículum...', 'exito');
             cerrarModal();
-            
-            // Para una implementación real, descomenta y actualiza estos enlaces:
-            // window.open('ruta/a/tu-cv.pdf', '_blank'); // Para PDF
-            // window.open('ruta/a/tu-cv.docx', '_blank'); // Para Word
         });
     });
     
     function cerrarModal() {
         modal.classList.remove('mostrar');
-        setTimeout(() => {
-            modal.style.display = 'none';
-        }, 300);
+        setTimeout(() => modal.style.display = 'none', 300);
     }
 }
 
-// ===== ANIMACIONES AL SCROLL =====
+// ===== ANIMACIONES Y OTROS =====
 function inicializarAnimacionesScroll() {
     const elementos = document.querySelectorAll('.fade-in');
-    
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
-            if (entry.isIntersecting) {
-                entry.target.classList.add('visible');
-            }
+            if (entry.isIntersecting) entry.target.classList.add('visible');
         });
-    }, {
-        threshold: 0.1,
-        rootMargin: '0px 0px -50px 0px'
-    });
+    }, { threshold: 0.1 });
     
-    elementos.forEach(elemento => {
-        observer.observe(elemento);
-    });
-    
-    // Actualizar clase activa en navegación al hacer scroll
-    const secciones = document.querySelectorAll('section[id]');
-    const enlacesNav = document.querySelectorAll('.menu a[href^="#"]');
-    
-    window.addEventListener('scroll', () => {
-        let current = '';
-        
-        secciones.forEach(seccion => {
-            const seccionTop = seccion.offsetTop;
-            const seccionHeight = seccion.clientHeight;
-            
-            if (scrollY >= (seccionTop - 200)) {
-                current = seccion.getAttribute('id');
-            }
-        });
-        
-        enlacesNav.forEach(enlace => {
-            enlace.classList.remove('active');
-            if (enlace.getAttribute('href') === `#${current}`) {
-                enlace.classList.add('active');
-            }
-        });
-    });
+    elementos.forEach(el => observer.observe(el));
 }
 
-// ===== CONTADORES ANIMADOS =====
 function inicializarContadores() {
     const contadores = document.querySelectorAll('.estadistica-numero');
-    
     const observer = new IntersectionObserver((entries) => {
         entries.forEach(entry => {
             if (entry.isIntersecting) {
@@ -420,43 +335,21 @@ function inicializarContadores() {
             }
         });
     }, { threshold: 0.5 });
-    
-    contadores.forEach(contador => {
-        observer.observe(contador);
-    });
+    contadores.forEach(c => observer.observe(c));
 }
 
-function animarContador(elemento) {
-    const valorFinal = parseInt(elemento.getAttribute('data-count'));
-    const duracion = 2000; // 2 segundos
-    const incremento = valorFinal / (duracion / 16); // 60fps
-    
+function animarContador(el) {
+    const valorFinal = parseInt(el.getAttribute('data-count'));
     let valorActual = 0;
-    
     const timer = setInterval(() => {
-        valorActual += incremento;
-        
+        valorActual += valorFinal / 100;
         if (valorActual >= valorFinal) {
-            valorActual = valorFinal;
+            el.textContent = valorFinal + '+';
             clearInterval(timer);
+        } else {
+            el.textContent = Math.floor(valorActual) + '+';
         }
-        
-        elemento.textContent = Math.floor(valorActual) + '+';
-    }, 16);
+    }, 20);
 }
 
-// ===== CONSOLA PERSONALIZADA =====
-console.log(`
-%c🚀 PORTAFOLIO DE ORLANDO RAMÓN %c
-%c
-¡Hola! 👋 Este es mi portafolio profesional.
-Teléfono: +58 412 115 6605
-Email: orlandoramon96@gmail.com
-
-Si estás interesado en trabajar conmigo,
-¡no dudes en contactarme! 💼
-`, 
-'background: #2563eb; color: white; padding: 8px 16px; border-radius: 4px; font-weight: bold;',
-'',
-'color: #64748b; line-height: 1.6;'
-);
+console.log("%c🚀 PORTAFOLIO UNIFICADO", "color: #2563eb; font-weight: bold; font-size: 1.2rem;");
