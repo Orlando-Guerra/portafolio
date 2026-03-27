@@ -576,6 +576,7 @@ img {
 .dato-item span {
     color: var(--color_blanco);
     font-weight: 600;
+    word-break: break-word;
 }
 
 .sobre-mi-estadisticas {

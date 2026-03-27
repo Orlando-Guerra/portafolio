@@ -89,6 +89,13 @@ document.addEventListener('DOMContentLoaded', function() {
     inicializarAnimacionesScroll();
     inicializarContadores();
     
+    const btnVerMas = document.getElementById('btn-ver-mas');
+    if(btnVerMas) {
+        btnVerMas.addEventListener('click', () => {
+            window.open('https://github.com/Orlando-Guerra', '_blank');
+        });
+    }
+    
     console.log('✅ Portafolio de Orlando Ramón cargado correctamente');
 });
 
@@ -166,10 +173,6 @@ function inicializarProyectos() {
         const card = crearCardProyecto(proyecto);
         contenedor.appendChild(card);
     });
-    
-    document.getElementById('btn-ver-mas').addEventListener('click', () => {
-        window.open('https://github.com/Orlando-Guerra', '_blank');
-    });
 }
 
 function crearCardProyecto(proyecto) {
@@ -226,6 +229,8 @@ function filtrarProyectos(categoria) {
         );
     }
     inicializarProyectos();
+    // Re-iniciar animaciones despues de recargar DOM
+    inicializarAnimacionesScroll();
 }
 
 // ===== FORMULARIO DE CONTACTO =====
